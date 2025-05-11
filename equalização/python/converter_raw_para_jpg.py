@@ -1,11 +1,13 @@
 from PIL import Image
 import numpy as np
 
-with open('Imagem_PB_equalizada_assembly.raw', 'rb') as f:
+with open('Equalizada.raw', 'rb') as f:
     data = f.read()
 
-altura = 120
+altura = 144
 largura = 176
+
+data = data[:altura * largura]
 
 if len(data) != altura * largura:
     raise ValueError(f"Tamanho do arquivo ({len(data)}) não bate com {altura}x{largura} ({altura*largura})")

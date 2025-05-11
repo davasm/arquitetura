@@ -24,7 +24,7 @@ def main():
     
     # Salvar resultados
     Image.fromarray(equalized).save("Imagem_PB_equalizada_altonivel.jpg")
-    salvar_ocorrencias(equalized, "ocorrencias_altonivel_equalizado.txt")
+    salvar_ocorrencias(equalized, "histograma_altonivel_equalizado.txt")
 
 def salvar_ocorrencias(array, arquivo):
     hist, _ = np.histogram(array, bins=256, range=(0, 256))
