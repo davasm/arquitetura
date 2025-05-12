@@ -9,7 +9,6 @@ def read_histogram(file_path):
             hist.append(int(parts[-1]))
     return hist
 
-# Ajuste aqui para os caminhos corretos dos seus arquivos no /mnt/data
 files = {
     "Python Original":          "histograma_imagem_alto_nivel.txt",
     "Assembly Original":        "histograma_assembly.txt",
@@ -17,17 +16,16 @@ files = {
     "Assembly Equalizado":      "histograma_equalizada_assembly.txt",
 }
 
-# Verifique se todos existem
+
 for label, fname in files.items():
-    path = fname  # Usa o arquivo no diretório atual
+    path = fname  
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Não encontrei '{fname}' no diretório atual")
     files[label] = path
 
-# Carrega todos os histogramas
+
 hists = {label: read_histogram(path) for label, path in files.items()}
 
-# Plot comparativo dos originais
 plt.figure()
 plt.plot(hists["Python Original"], label="Python Original")
 plt.plot(hists["Assembly Original"], label="Assembly Original")
@@ -38,7 +36,6 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-# Plot comparativo dos equalizados
 plt.figure()
 plt.plot(hists["Python Equalizado"], label="Python Equalizado")
 plt.plot(hists["Assembly Equalizado"], label="Assembly Equalizado")
