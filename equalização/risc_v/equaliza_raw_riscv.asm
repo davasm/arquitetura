@@ -1,22 +1,19 @@
-# equaliza_raw_riscv.asm
-# Lê QCIF raw (176×144) e escreve raw equalizado.
+
 
     .data
 hist:      .space 1024      # histograma
-map_eq:    .space 1024      # mapa de equalização
+map_eq:    .space 1024      # mapa de equalizaï¿½ï¿½o
 buffer:    .space 25344     # QCIF raw
 
     .text
     .globl main
 main:
-    # 1) Ler raw
     li   a0, 0
     la   a1, buffer
     li   a2, 25344
     li   a7, 63       # read
     ecall
 
-    # 2) Zerar histograma
     la   t0, hist
     li   t1, 256
 zero_loop:
@@ -25,7 +22,6 @@ zero_loop:
     addi t1, t1, -1
     bnez t1, zero_loop
 
-    # 3) Construir histograma
     la   t0, buffer
     li   t1, 25344
 fill_loop:
@@ -40,11 +36,10 @@ fill_loop:
     addi t1, t1, -1
     bnez t1, fill_loop
 
-    # 4) Gerar mapa de equalização
     la   t0, hist
     la   t1, map_eq
     li   t2, 0        # acumulado
-    li   t3, 0        # índice
+    li   t3, 0        # ï¿½ndice
     li   t4, 25344    # total pixels
 map_loop:
     lw   t5, 0(t0)
@@ -59,7 +54,6 @@ map_loop:
     li   t6, 256
     blt  t3, t6, map_loop
 
-    # 5) Aplicar equalização
     la   t0, buffer
     li   t1, 25344
 apply_loop:
@@ -73,13 +67,11 @@ apply_loop:
     addi t1, t1, -1
     bnez t1, apply_loop
 
-    # 6) Escrever raw equalizado
     li   a0, 1
     la   a1, buffer
     li   a2, 25344
     li   a7, 64       # write
     ecall
 
-    # 7) Exit
     li   a7, 10
     ecall
