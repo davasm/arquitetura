@@ -1,11 +1,9 @@
-# equaliza_e_histo_riscv.asm
-# Lê até 25344 bytes da stdin (QCIF 176×144), equaliza o histograma
-# e imprime o histograma da imagem equalizada em texto.
+
 
     .data
 buffer:    .space 25344    # QCIF raw
 hist:      .space 1024     # histograma original
-map_eq:    .space 1024     # mapa de equalização
+map_eq:    .space 1024     # mapa de equalizaï¿½ï¿½o
 hist2:     .space 1024     # histograma equalizado
 
 str_pix:   .asciz "Pixel "
@@ -15,15 +13,13 @@ newline:   .asciz "\n"
     .text
     .globl main
 main:
-    # 1) Ler raw da stdin
     li   a0, 0            # fd = stdin
     la   a1, buffer
-    li   a2, 25344        # máximo de bytes
+    li   a2, 25344        # mï¿½ximo de bytes
     li   a7, 63           # syscall read
     ecall
     mv   s0, a0           # s0 = bytes realmente lidos
 
-    # 2) Zerar hist[] e hist2[]
     la   t0, hist
     la   t1, hist2
     li   t2, 256
@@ -35,7 +31,6 @@ zero_both:
     addi t2, t2, -1
     bnez t2, zero_both
 
-    # 3) Construir hist[] da original
     la   t0, buffer
     mv   t1, s0
     la   t2, hist
@@ -50,11 +45,10 @@ build_hist:
     addi t1, t1, -1
     bnez t1, build_hist
 
-    # 4) Gerar mapa de equalização em map_eq[]
     la   t0, hist
     la   t1, map_eq
     li   t2, 0         # acumulado
-    li   t3, 0         # índice
+    li   t3, 0         # ï¿½ndice
     mv   t4, s0        # total pixels
 map_loop:
     lw   t5, 0(t0)
@@ -69,7 +63,6 @@ map_loop:
     li   t6, 256
     blt  t3, t6, map_loop
 
-    # 5) Aplicar equalização no buffer
     la   t0, buffer
     mv   t1, s0
     la   t2, map_eq
@@ -83,7 +76,6 @@ apply_eq:
     addi t1, t1, -1
     bnez t1, apply_eq
 
-    # 6) Recontar histograma da imagem equalizada em hist2[]
     la   t0, buffer
     mv   t1, s0
     la   t2, hist2
@@ -98,7 +90,6 @@ build_hist2:
     addi t1, t1, -1
     bnez t1, build_hist2
 
-    # 7) Imprimir hist2[]
     li   t0, 0
 print_loop:
     # "Pixel "
@@ -106,7 +97,7 @@ print_loop:
     li   a7, 4
     ecall
 
-    # índice
+    # ï¿½ndice
     mv   a0, t0
     li   a7, 1
     ecall
@@ -133,6 +124,5 @@ print_loop:
     li   t1, 256
     blt  t0, t1, print_loop
 
-    # 8) Exit
     li   a7, 10
     ecall
