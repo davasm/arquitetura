@@ -1,14 +1,10 @@
-# histo_riscv.asm
-# Programa RISC-V (RARS) para calcular histograma de entrada raw via stdin (QCIF 176×144)
+
 
     .data
-# Espaço para histograma: 256 entradas de 4 bytes
 hist:       .space 1024
 
-# Buffer para leitura de dados raw de 176x144 = 25344 bytes
 buffer:     .space 25344
 
-# Strings para ecall print_string (MIPS-style syscalls)
 str_pix:    .string "Pixel "
 str_sep:    .string " - Ocorrencia "
 str_nl:     .string "\n"
@@ -16,14 +12,12 @@ str_nl:     .string "\n"
     .text
     .globl main
 main:
-    # 1) Ler raw da imagem via stdin (syscall 63: read)
     li   a0, 0            # file descriptor stdin
-    la   a1, buffer       # endereço do buffer
-    li   a2, 25344        # número de bytes a ler
+    la   a1, buffer       # endereï¿½o do buffer
+    li   a2, 25344        # nï¿½mero de bytes a ler
     li   a7, 63           # syscall read
     ecall
 
-    # 2) Inicializar histograma com zeros
     la   t0, hist
     li   t1, 256
 zero_loop:
@@ -32,7 +26,6 @@ zero_loop:
     addi t1, t1, -1
     bnez t1, zero_loop
 
-    # 3) Processar cada pixel do buffer
     la   t2, buffer
     li   t3, 25344
 proc_loop:
@@ -47,7 +40,6 @@ proc_loop:
     addi t3, t3, -1
     bnez t3, proc_loop
 
-    # 4) Imprimir resultados
     li   s0, 0
 print_loop:
     # print_string "Pixel "
@@ -73,11 +65,10 @@ print_loop:
     la   a0, str_nl
     li   a7, 4
     ecall
-    # próximo índice
+    # prï¿½ximo ï¿½ndice
     addi s0, s0, 1
     li   s4, 256
     blt  s0, s4, print_loop
 
-    # 5) Exit
     li   a7, 10
     ecall
